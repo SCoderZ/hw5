@@ -12,20 +12,24 @@
 #include "dict-eng.h"
 using namespace std;
 
+
 bool validFloats(string word, string flts) {
-  for (char a: flts) {
-    bool found = false;
-    for (char b: word) {
-      if (a == b) {
-        found = true;
-        break;
-      }
-    }
-    if (!found) {
-      return false;
+  if (flts.empty()) {
+    return true;
+  }
+
+  char a = flts[0];
+  bool found = false;
+  for (char b: word) {
+    if (a == b) {
+      found = true;
+      break;
     }
   }
-  return true;
+  if (!found) {
+    return false;
+  }
+  return validFloats(word, flts.substr(1));
 }
 
 bool isWord(string word, const std::set<std::string>& dict) {
@@ -39,13 +43,16 @@ bool isWord(string word, const std::set<std::string>& dict) {
   return false;
 }
 
-int calcRemainSpots(const string& in) {
-  int cnt = 0;
-  for (int i = 0; i < in.size(); i ++) {
+int calcRemainSpots(const string& in, int cnt, int i) {
+  if (i < in.size()) {
     if (in[i] == '-') {
       cnt++;
     }
+
+    i++;
+    return calcRemainSpots(in, cnt, i);
   }
+
   return cnt;
 }
 
@@ -95,7 +102,7 @@ std::set<std::string> recurse(int n, string word, const string& in, const string
   }
 
   if (word[word.size() - n] == '-') {
-    int remainSpots = calcRemainSpots(word);
+    int remainSpots = calcRemainSpots(word, 0, 0);
     if (remainSpots > flts.size()) {
       string flts_copy = flts;
       recurseHelper2(n, word, in, floating, flts, flts_copy, matched, dict, 123, 97);
