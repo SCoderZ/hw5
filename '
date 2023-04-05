@@ -38,7 +38,6 @@ bool trace(
   DailySchedule sched_cpy = sched;
   vector<int> worker_work_days_cpy = worker_work_days;
 
-  bool res = false;
   for (int i = 0; i < num_workers; i++) {
     avail = avail_cpy;
     n = n_cpy;
@@ -51,22 +50,16 @@ bool trace(
       worker_work_days[i]++;
       avail[n][i] = false;
       d++;
-
       if (d < dailyNeed) {
-        res = trace(avail, n, d, dailyNeed, maxShifts, sched, worker_work_days);
-        if (res) {
-          return res;
-        }
+        return trace(avail, n, d, dailyNeed, maxShifts, sched, worker_work_days);
       } else if (d == dailyNeed && n + 1 != avail.size()) {
-        res = trace(avail, n+1, 0, dailyNeed, maxShifts, sched, worker_work_days);
-        if (res) {
-          return res;
-        }
+        return trace(avail, n+1, 0, dailyNeed, maxShifts, sched, worker_work_days);
       } else if (d == dailyNeed && n + 1 == avail.size()) { 
         return true;
       }
-    } 
+    }   
   }
+
 
   return false;
 }
