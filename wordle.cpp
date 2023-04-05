@@ -12,6 +12,18 @@
 #include "dict-eng.h"
 using namespace std;
 
+void validFloatsHelper(char a, bool& found, string word, int i) {
+  if (i < word.size()) {
+    if (a == word[i]) {
+      found = true;
+    }
+    i++;
+    if (!found) {
+      validFloatsHelper(a, found, word, i);
+    }
+  }
+
+}
 
 bool validFloats(string word, string flts) {
   if (flts.empty()) {
@@ -20,12 +32,8 @@ bool validFloats(string word, string flts) {
 
   char a = flts[0];
   bool found = false;
-  for (char b: word) {
-    if (a == b) {
-      found = true;
-      break;
-    }
-  }
+  validFloatsHelper(a, found, word, 0);
+
   if (!found) {
     return false;
   }
