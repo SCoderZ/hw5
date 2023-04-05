@@ -72,6 +72,7 @@ std::set<std::string> recurse(int n, string word, const string& in, const string
         for (int j = 0; j < flts.size(); j++) {
           if (i == flts[j]) {
             flts = flts.substr(0,j) + flts.substr(j+1);
+            break;
           }
         }
 
