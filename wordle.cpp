@@ -69,12 +69,13 @@ std::set<std::string> recurse(int n, string word, const string& in, const string
         flts = flts_copy;
         // cout << "floating" << flts << endl;
 
-        for (int j = 0; j < flts.size(); j++) {
+        flts.erase(flts.find(i));
+        /* for (int j = 0; j < flts.size(); j++) {
           if (i == flts[j]) {
             flts = flts.substr(0,j) + flts.substr(j+1);
             break;
           }
-        }
+        } */
 
         std::set<std::string> newSet = recurse(n - 1, word, in, floating, flts, matched, dict);
         matched.insert(newSet.begin(), newSet.end());

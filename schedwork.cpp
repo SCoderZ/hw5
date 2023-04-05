@@ -39,6 +39,7 @@ bool trace(
   vector<int> worker_work_days_cpy = worker_work_days;
 
   bool res = false;
+
   for (int i = 0; i < num_workers; i++) {
     avail = avail_cpy;
     n = n_cpy;
@@ -72,6 +73,31 @@ bool trace(
 }
 
 // Add your implementation of schedule() and other helper functions here
+void workdayFill(vector<int>& workerDay, int n) {
+  if (workerDay.size() < n) {
+    workerDay.push_back(0);
+    workdayFill(workerDay, n);
+  }
+}
+
+
+void workersFill(vector<Worker_T>& workers, int n) {
+  if (workers.size() < n) {
+    workers.push_back(INVALID_ID);
+    workersFill(workers, n);
+  }
+}
+
+void schedFill(DailySchedule& sched, int avail_size, int n, int dailyNeed) {
+  if (n < avail_size) {
+    vector<Worker_T> workers;
+    workersFill(workers, dailyNeed);
+    sched.push_back(workers);
+    n++;
+    schedFill(sched, avail_size, n, dailyNeed);
+
+  }
+}
 
 bool schedule(
     const AvailabilityMatrix& avail,
@@ -88,17 +114,10 @@ bool schedule(
 
   int num_workers = avail[0].size();
   vector<int> worker_work_days;
-  for (int i = 0; i < num_workers; i++) {
-    worker_work_days.push_back(0);
-  }
 
-  for (int i = 0; i < avail.size(); i++) {
-    vector<Worker_T> workers;
-    for (int j = 0; j < dailyNeed; j++) {
-      workers.push_back(INVALID_ID);
-    }
-    sched.push_back(workers);
-  }
+  workdayFill(worker_work_days, num_workers);
+
+  schedFill(sched, avail.size(), 0, dailyNeed);
 
   return trace(avail, 0, 0, dailyNeed, maxShifts, sched, worker_work_days);
 }
