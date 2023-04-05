@@ -1,6 +1,8 @@
+//#ifndef RECCHECK
+// For debugging
+//#endif
 
 #include "wordle.h"
-#include <vector>
 #include "dict-eng.h"
 using namespace std;
 
@@ -14,7 +16,6 @@ void validFloatsHelper(char a, bool& found, string word, int i) {
       validFloatsHelper(a, found, word, i);
     }
   }
-
 }
 
 bool validFloats(string word, string flts) {
