@@ -33,8 +33,8 @@ typedef std::vector<std::vector<Worker_T> > DailySchedule;
  */
 bool schedule(
     const AvailabilityMatrix& avail,
-    const size_t dailyNeed,
-    const size_t maxShifts,
+    const std::size_t dailyNeed,
+    const std::size_t maxShifts,
     DailySchedule& sched
 );
 
