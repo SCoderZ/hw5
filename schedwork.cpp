@@ -33,7 +33,6 @@ bool trace(
   int num_workers = avail[0].size();
   int num_days = avail.size();
 
-  AvailabilityMatrix avail_cpy = avail;
   size_t n_cpy = n;
   size_t d_cpy = d;
   DailySchedule sched_cpy = sched;
@@ -42,7 +41,6 @@ bool trace(
   bool res = false;
 
   for (int i = 0; i < num_workers; i++) {
-    avail = avail_cpy;
     n = n_cpy;
     d = d_cpy;
     sched = sched_cpy;
@@ -67,6 +65,7 @@ bool trace(
       } else if (d == dailyNeed && n + 1 == num_days) { 
         return true;
       }
+      avail[n][i] = true;
     } 
   }
 
