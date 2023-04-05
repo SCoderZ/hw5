@@ -22,15 +22,16 @@ static const Worker_T INVALID_ID = (unsigned int)-1;
 
 // Add prototypes for any helper functions here
 bool trace(
-  AvailabilityMatrix avail,
+  AvailabilityMatrix &avail,
   size_t n, // day
   size_t d, // need position
   const size_t dailyNeed,
   const size_t maxShifts,
   DailySchedule &sched,
-  vector<int> worker_work_days
+  vector<int>& worker_work_days
 ) {
   int num_workers = avail[0].size();
+  int num_days = avail.size();
 
   AvailabilityMatrix avail_cpy = avail;
   size_t n_cpy = n;
@@ -58,12 +59,12 @@ bool trace(
         if (res) {
           return res;
         }
-      } else if (d == dailyNeed && n + 1 != avail.size()) {
+      } else if (d == dailyNeed && n + 1 != num_days) {
         res = trace(avail, n+1, 0, dailyNeed, maxShifts, sched, worker_work_days);
         if (res) {
           return res;
         }
-      } else if (d == dailyNeed && n + 1 == avail.size()) { 
+      } else if (d == dailyNeed && n + 1 == num_days) { 
         return true;
       }
     } 
@@ -119,6 +120,8 @@ bool schedule(
 
   schedFill(sched, avail.size(), 0, dailyNeed);
 
-  return trace(avail, 0, 0, dailyNeed, maxShifts, sched, worker_work_days);
+  AvailabilityMatrix avail_cpy = avail;
+
+  return trace(avail_cpy, 0, 0, dailyNeed, maxShifts, sched, worker_work_days);
 }
 
