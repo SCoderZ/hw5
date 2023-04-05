@@ -53,23 +53,28 @@ int calcRemainSpots(const string& in) {
 std::set<std::string> recurse(int n, string word, const string& in, const string& floating, string flts, std::set<std::string> matched, const std::set<std::string>& dict) {
   // check if it has valid floats
   if (n == 0) {
+      // cout << word << endl;
     if (validFloats(word, floating) && isWord(word, dict)) {
       matched.insert(word);
     }
     return matched;
   }
 
-  // cout << word << endl;
   if (word[word.size() - n] == '-') {
     int remainSpots = calcRemainSpots(word);
     if (remainSpots > flts.size()) {
+      string flts_copy = flts;
       for (int i = 97; i < 123; i++) {
         word[word.size() - n] = i;
+        flts = flts_copy;
+        // cout << "floating" << flts << endl;
+
         for (int j = 0; j < flts.size(); j++) {
           if (i == flts[j]) {
             flts = flts.substr(0,j) + flts.substr(j+1);
           }
         }
+
         std::set<std::string> newSet = recurse(n - 1, word, in, floating, flts, matched, dict);
         matched.insert(newSet.begin(), newSet.end());
       }
