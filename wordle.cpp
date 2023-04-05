@@ -49,6 +49,20 @@ int calcRemainSpots(const string& in) {
   return cnt;
 }
 
+void recurseHelper(int n, string word, const string& in, const string& floating, string flts, std::set<std::string> matched, const std::set<std::string>& dict, int i); 
+
+std::set<std::string> recurse(int n, string word, const string& in, const string& floating, string flts, std::set<std::string> matched, const std::set<std::string>& dict);
+
+void recurseHelper(int n, string word, const string& in, const string& floating, string flts, std::set<std::string> matched, const std::set<std::string>& dict, int lim, int i) {
+  if (i < lim) {
+    word[word.size() - n] = flts[i];
+    std::set<std::string> newSet = recurse(n, word, in, floating, flts.substr(0,i) + flts.substr(i+1), matched, dict);
+    matched.insert(newSet.begin(), newSet.end());
+    i++;
+    recurseHelper(n, word, in, floating, flts, matched, dict, lim, i);
+  }
+}
+
 // return a set of all the possible combos
 std::set<std::string> recurse(int n, string word, const string& in, const string& floating, string flts, std::set<std::string> matched, const std::set<std::string>& dict) {
   // check if it has valid floats
@@ -69,7 +83,10 @@ std::set<std::string> recurse(int n, string word, const string& in, const string
         flts = flts_copy;
         // cout << "floating" << flts << endl;
 
-        flts.erase(flts.find(i));
+        int j = flts.find(i);
+        if (j != string::npos) {
+          flts.erase(j, 1);
+        }
         /* for (int j = 0; j < flts.size(); j++) {
           if (i == flts[j]) {
             flts = flts.substr(0,j) + flts.substr(j+1);
@@ -81,11 +98,7 @@ std::set<std::string> recurse(int n, string word, const string& in, const string
         matched.insert(newSet.begin(), newSet.end());
       }
     } else if (remainSpots == flts.size()) {
-      for (int i = 0; i < flts.size(); i++) {
-        word[word.size() - n] = flts[i];
-        std::set<std::string> newSet = recurse(n - 1, word, in, floating, flts.substr(0,i) + flts.substr(i+1), matched, dict);
-        matched.insert(newSet.begin(), newSet.end());
-      }
+      recurseHelper(n - 1, word, in, floating, flts, matched, dict, flts.size(), 0);
     }
   } else {
     std::set<std::string> newSet = recurse(n - 1, word, in, floating, flts, matched, dict);
