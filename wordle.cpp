@@ -1,11 +1,3 @@
-#ifndef RECCHECK
-// For debugging
-#include <iostream>
-// For std::remove
-#include <algorithm> 
-#include <map>
-#include <set>
-#endif
 
 #include "wordle.h"
 #include <vector>
@@ -114,18 +106,6 @@ std::set<std::string> recurse(int n, string word, const string& in, const string
     if (remainSpots > flts.size()) {
       string flts_copy = flts;
       recurseHelper2(n, word, in, floating, flts, flts_copy, matched, dict, 123, 97);
-      /* for (int i = 97; i < 123; i++) {
-        word[word.size() - n] = i;
-        flts = flts_copy;
-
-        int j = flts.find(i);
-        if (j != string::npos) {
-          flts.erase(j, 1);
-        }
-
-        std::set<std::string> newSet = recurse(n - 1, word, in, floating, flts, matched, dict);
-        matched.insert(newSet.begin(), newSet.end());
-      } */
     } else if (remainSpots == flts.size()) {
       recurseHelper(n, word, in, floating, flts, matched, dict, flts.size(), 0);
     }
